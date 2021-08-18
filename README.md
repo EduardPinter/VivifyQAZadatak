@@ -36,7 +36,7 @@ For running tests in Firefox on the end of the lines add the following code
 For full allure report run this command in terminal after running all the tests
 
 ```bash
-allure server allure-results
+allure serve allure-results
 ```
 
 
