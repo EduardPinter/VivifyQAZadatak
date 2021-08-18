@@ -2,7 +2,6 @@ package galleryApp;
 
 import driverInit.TestBase;
 import io.qameta.allure.Story;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class Test_8Logout extends TestBase {

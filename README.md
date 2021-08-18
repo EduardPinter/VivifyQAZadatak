@@ -8,7 +8,7 @@ Use the Maven to install all the neccessary dependencies from pom.xml file
 
 ## Pre-test data changing
 
-Before running the test change the email variable in src/main/java/dataInput/DataStrings in order for the registration to be successful
+Before running the test change the email variable in src/main/java/dataInput/DataStrings to another valid email adress in order for the registration to be successful
 
 ## Usage
 
