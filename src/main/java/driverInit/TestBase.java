@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 @ExtendWith(GetTestName.class)
+@ExtendWith(DriverQuit.class)
 @ExtendWith(TestFailed.class)
 
 public class TestBase {

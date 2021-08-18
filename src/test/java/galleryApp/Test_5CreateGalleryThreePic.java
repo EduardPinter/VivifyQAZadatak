@@ -1,15 +1,13 @@
+package galleryApp;
+
 import dataInput.DataStrings;
 import driverInit.TestBase;
-import galleryApp.BasePage;
-import galleryApp.CreateGalleryPage;
-import galleryApp.LoginPage;
-import galleryApp.MainPage;
 import io.qameta.allure.Story;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Test_CreateGalleryThreePic extends TestBase {
+public class Test_5CreateGalleryThreePic extends TestBase {
 
     private final Logger log = LoggerFactory.getLogger(Test_1Register.class);
     DataStrings data = new DataStrings();
@@ -25,5 +23,6 @@ public class Test_CreateGalleryThreePic extends TestBase {
         createGalleryPage.titleInput(data.galleryTitleThreePicture);
         createGalleryPage.descInput(data.galleryDescription);
         createGalleryPage.addThreeImages(data.galleryLinkPicturePng);
+        createGalleryPage.clickSubmitButton();
     }
 }

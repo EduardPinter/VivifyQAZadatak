@@ -20,6 +20,8 @@ public class MainPage {
     WebElement createGalleryNavLink;
     @FindBy(linkText = "Login")
     WebElement loginNavLink;
+    @FindBy(linkText = "My Galleries")
+    WebElement myGalleriesNavLink;
 
     public MainPage(WebDriver driver) {
         this.driver = driver;
@@ -49,5 +51,13 @@ public class MainPage {
         log.info("==========================================");
         loginNavLink.click();
         return new LoginPage(driver);
+    }
+
+    @Step("Visit My Galleries Page")
+    public MyGalleriesPage visitMyGalleriesPage(){
+        log.info("Visiting My Galleries Page");
+        log.info("==========================================");
+        myGalleriesNavLink.click();
+        return new MyGalleriesPage(driver);
     }
 }
