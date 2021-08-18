@@ -39,4 +39,8 @@ For full allure report run this command in terminal after running all the tests
 allure serve allure-results
 ```
 
+## Postman collections
+
+Import the collection and enviroment file into Postman and run the tests in order
+
 
