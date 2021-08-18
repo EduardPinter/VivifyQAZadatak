@@ -1,0 +1,724 @@
+{
+	"info": {
+		"_postman_id": "7756105a-de88-46bb-b63a-a3048f8d3d57",
+		"name": "Zadatak Vivify QA",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "register",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var email = \"ep\" + _.random(1, 1000000) + \"@example.com\"",
+							"pm.environment.set(\"email\", email);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Response time is less than 400ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(400);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"first_name\":\"{{firstName}}\",\n    \"last_name\":\"{{lastName}}\",\n    \"email\":\"{{email}}\",\n    \"password\":\"{{password}}\",\n    \"password_confirmation\":\"{{passwordConfirmation}}\",\n    \"terms_and_conditions\":{{terms}}\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/auth/register",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"// is the token type = bearer",
+							"",
+							"tests[\"Token type:\" +  jsonData.token_type] = jsonData.token_type === \"bearer\"",
+							"",
+							"var token = jsonData.access_token;",
+							"pm.environment.set(\"token\", token);",
+							"",
+							"// setting user_id in env",
+							"var user_id = jsonData.user_id;",
+							"pm.environment.set(\"user_id\", user_id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\":\"{{email}}\",\n    \"password\":\"{{password}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/auth/login",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create gallery - 1 picture",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Checking if by creating a gallery i am getting a response code 201",
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"// setting the gallery id into env",
+							"var jsonData = pm.response.json();",
+							"var gallery_id = jsonData.id;",
+							"pm.environment.set(\"gallery_id\", gallery_id);",
+							"",
+							"// checking if the title and description of the gallery created are the same as ones from env",
+							"",
+							"var title = pm.environment.get(\"title\");",
+							"tests[\"title:\" + jsonData.title] = jsonData.title === title;",
+							"",
+							"var desc = pm.environment.get(\"description\");",
+							"tests[\"description:\" + jsonData.description] = jsonData.description === desc;",
+							"  "
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\":\"{{title}}\",\n    \"description\":\"{{description}}\",\n    \"images\":{{images }}\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/galleries",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"galleries"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "my galleries - last created gallery",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"var gallery_id = pm.environment.get(\"gallery_id\");",
+							"let title = pm.environment.get(\"title\");",
+							"let description = pm.environment.get(\"description\");",
+							"",
+							"var jsonData = pm.response.json();",
+							"    ",
+							"tests[\"gallery_id: \" + jsonData.galleries[0].id] = jsonData.galleries[0].id === gallery_id;",
+							"tests[\"title: \" + jsonData.galleries[0].title] = jsonData.galleries[0].title === title;",
+							"tests[\"description: \" + jsonData.galleries[0].description] = jsonData.galleries[0].description === description;",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/my-galleries?page=1&term=",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"my-galleries"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "term",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create gallery - no description",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Checking if by creating a gallery i am getting a response code 201",
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"// setting the gallery id into env",
+							"var jsonData = pm.response.json();",
+							"var gallery_id = jsonData.id;",
+							"pm.environment.set(\"gallery_no_description_id\", gallery_id);",
+							"",
+							"// checking if the title and description of the gallery created are the same as ones from env",
+							"",
+							"var title = pm.environment.get(\"title\");",
+							"tests[\"title:\" + jsonData.title] = jsonData.title === title;",
+							"",
+							"  "
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\":\"{{title}}\",\n    \"images\":{{images }}\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/galleries",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"galleries"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "my galleries - last created gallery - no desc",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"var gallery_id = pm.environment.get(\"gallery_no_description_id\");",
+							"let title = pm.environment.get(\"title\");",
+							"",
+							"",
+							"var jsonData = pm.response.json();",
+							"    ",
+							"tests[\"gallery_id: \" + jsonData.galleries[0].id] = jsonData.galleries[0].id === gallery_id;",
+							"tests[\"title: \" + jsonData.galleries[0].title] = jsonData.galleries[0].title === title;",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/my-galleries?page=1&term=",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"my-galleries"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "term",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create gallery - 3 images",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"",
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"var jsonData = pm.response.json();",
+							"var gallery_id = jsonData.id;",
+							"pm.environment.set(\"3pic_gallery_id\", gallery_id);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\":\"{{title}}\",\n    \"description\":\"{{description}}\",\n    \"images\": [\"https://personal.psu.edu/xqz5228/jpg.jpg\", \"https://personal.psu.edu/xqz5228/jpg.jpg\", \"https://personal.psu.edu/xqz5228/jpg.jpg\"]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/galleries",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"galleries"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "My galleries - 3 picture created gallery",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"var jsonData = pm.response.json();",
+							"",
+							"pm.test(\"Check images array\", function () {",
+							"    pm.expect(jsonData.galleries[0].images).to.have.lengthOf(3);",
+							"});",
+							"",
+							"var gallery_id = pm.environment.get(\"3pic_gallery_id\");",
+							"tests[\"gallery_id: \" + jsonData.galleries[0].id] = jsonData.galleries[0].id === gallery_id;",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer {{token}}"
+					},
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/my-galleries?page=1&term=",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"my-galleries"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "term",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create gallery - 3 images - no description",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"",
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"var jsonData = pm.response.json();",
+							"var gallery_id = jsonData.id;",
+							"pm.environment.set(\"3pic_gallery_id_no_desc\", gallery_id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\":\"{{title}}\",\n    \"images\": [\"https://personal.psu.edu/xqz5228/jpg.jpg\", \"https://personal.psu.edu/xqz5228/jpg.jpg\", \"https://personal.psu.edu/xqz5228/jpg.jpg\"]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/galleries",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"galleries"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "My galleries - 3 picture created gallery - no description",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"var jsonData = pm.response.json();",
+							"",
+							"pm.test(\"Check images array\", function () {",
+							"    pm.expect(jsonData.galleries[0].images).to.have.lengthOf(3);",
+							"});",
+							"",
+							"var gallery_id = pm.environment.get(\"3pic_gallery_id_no_desc\");",
+							"tests[\"gallery_id: \" + jsonData.galleries[0].id] = jsonData.galleries[0].id === gallery_id;",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer {{token}}"
+					},
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/my-galleries?page=1&term=",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"my-galleries"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "term",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Logout",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"var data = pm.response.json();",
+							"var message = pm.environment.get(\"logout_message\");",
+							"",
+							"tests[\"Logout message is : \" + data.message] = data.message === message;",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/auth/logout",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"auth",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
