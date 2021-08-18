@@ -14,7 +14,7 @@ public class Test_3CreateGalleryNoDesc extends TestBase {
 
     @Story("Logged in user creates a gallery with no description")
     @Test
-    public void testCreateGalleryNoDesc(){
+    public void testCreateGalleryNoDesc() {
         BasePage basePage = new BasePage(driver);
         MainPage mainPage = basePage.visitUrl();
         LoginPage loginPage = mainPage.visitLoginPage();

@@ -23,13 +23,14 @@ public class MainPage {
     @FindBy(linkText = "My Galleries")
     WebElement myGalleriesNavLink;
 
+
     public MainPage(WebDriver driver) {
         this.driver = driver;
         PageFactory.initElements(driver, this);
     }
 
     @Step("Visit register page")
-    public RegisterPage visitRegisterPage(){
+    public RegisterPage visitRegisterPage() {
         log.info("Visiting register page");
         log.info("==========================================");
         registerNavLink.click();
@@ -37,7 +38,7 @@ public class MainPage {
     }
 
     @Step("Visit Create Gallery Page")
-    public CreateGalleryPage visitCreateGalleryPage(){
+    public CreateGalleryPage visitCreateGalleryPage() {
         log.info("Visiting Create Gallery Page");
         log.info("==========================================");
         createGalleryNavLink.click();
@@ -46,7 +47,7 @@ public class MainPage {
     }
 
     @Step("Visit Login Page")
-    public LoginPage visitLoginPage(){
+    public LoginPage visitLoginPage() {
         log.info("Visiting Login Page");
         log.info("==========================================");
         loginNavLink.click();
@@ -54,10 +55,12 @@ public class MainPage {
     }
 
     @Step("Visit My Galleries Page")
-    public MyGalleriesPage visitMyGalleriesPage(){
+    public MyGalleriesPage visitMyGalleriesPage() {
         log.info("Visiting My Galleries Page");
         log.info("==========================================");
         myGalleriesNavLink.click();
         return new MyGalleriesPage(driver);
     }
+
+
 }

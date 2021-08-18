@@ -34,27 +34,39 @@ public class CreateGalleryPage {
         PageFactory.initElements(driver, this);
     }
 
-    public void titleInput(String data){
+    public void titleInput(String data) {
+        log.info("Typing the gallery title");
+        log.info("==========================================");
         galleryTitle.sendKeys(data);
     }
-    public void descInput(String data){
+
+    public void descInput(String data) {
+        log.info("Typing the gallery description");
+        log.info("==========================================");
         galleryDescription.sendKeys(data);
     }
-    public void oneImageAdd(String data){
+
+    public void oneImageAdd(String data) {
+        log.info("Adding one image url");
+        log.info("==========================================");
         imageInputAlone.sendKeys(data);
     }
-    public void addThreeImages(String data){
+
+    public void addThreeImages(String data) {
+        log.info("Adding three images");
+        log.info("==========================================");
         imageInputAlone.sendKeys(data);
         imageAddButton.click();
         imageAddButton.click();
         imageInputTwo.sendKeys(data);
         imageInputThree.sendKeys(data);
     }
-    public void clickSubmitButton(){
+
+    public void clickSubmitButton() {
+        log.info("Clicking submit button");
+        log.info("==========================================");
         submitButton.click();
     }
-
-
 
 
 }

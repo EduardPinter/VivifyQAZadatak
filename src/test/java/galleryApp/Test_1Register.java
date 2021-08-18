@@ -15,7 +15,7 @@ public class Test_1Register extends TestBase {
     @Story("User registers into gallery app")
     @Description("User uses valid credentials to register onto the app")
     @Test
-    public void testRegisterUser(){
+    public void testRegisterUser() {
         BasePage basePage = new BasePage(driver);
         MainPage mainPage = basePage.visitUrl();
         RegisterPage registerPage = mainPage.visitRegisterPage();

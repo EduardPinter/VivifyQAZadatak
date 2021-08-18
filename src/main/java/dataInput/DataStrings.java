@@ -4,7 +4,7 @@ public class DataStrings {
 
     public String firstName = "Edi";
     public String lastName = "P";
-    public String email = "ep10@test.com";
+    public String email = "ep5@test.com";
     public String password = "test1234";
     public String passwordConf = "test1234";
     public String baseUrl = "https://gallery-app.vivifyideas.com/";

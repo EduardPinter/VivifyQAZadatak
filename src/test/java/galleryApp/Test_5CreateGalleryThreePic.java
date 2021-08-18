@@ -14,7 +14,7 @@ public class Test_5CreateGalleryThreePic extends TestBase {
 
     @Story("Logged in user creates a gallery with 3 images")
     @Test
-    public void testCreateThreePicGallery(){
+    public void testCreateThreePicGallery() {
         BasePage basePage = new BasePage(driver);
         MainPage mainPage = basePage.visitUrl();
         LoginPage loginPage = mainPage.visitLoginPage();

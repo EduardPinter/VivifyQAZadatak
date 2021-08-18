@@ -1,6 +1,7 @@
 package galleryApp;
 
 import dataInput.DataStrings;
+import io.qameta.allure.Step;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -20,18 +21,24 @@ public class LoginPage {
     WebElement password;
     @FindBy(css = "form > .btn.btn-custom")
     WebElement submitButton;
+    @FindBy(linkText = "Logout")
+    WebElement logoutNavLink;
 
     public LoginPage(WebDriver driver) {
         this.driver = driver;
         PageFactory.initElements(driver, this);
     }
 
-    public void enterUserInputForLogin(){
+    public void enterUserInputForLogin() {
         log.info("Entering user data and clicking submit button");
         log.info("==========================================");
         email.sendKeys(data.email);
         password.sendKeys(data.password);
         submitButton.click();
+    }
+    @Step("Logging out")
+    public void loggingOut(){
+        logoutNavLink.click();
     }
 
 

@@ -14,7 +14,7 @@ public class Test_4CreateGalleryOnePic extends TestBase {
 
     @Story("Logged in user creates a gallery with description")
     @Test
-    public void testCreateGalleryWithDesc(){
+    public void testCreateGalleryWithDesc() {
         BasePage basePage = new BasePage(driver);
         MainPage mainPage = basePage.visitUrl();
         LoginPage loginPage = mainPage.visitLoginPage();

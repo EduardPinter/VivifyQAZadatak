@@ -31,16 +31,27 @@ public class MyGalleriesPage {
         PageFactory.initElements(driver, this);
     }
 
-    public String getNormalGalleryTitle(){
+    public String getNormalGalleryTitle() {
+        log.info("Getting full gallery title");
+        log.info("==========================================");
         return galleryTitleNormal.getText();
     }
-    public String getNoDescGalleryTitle(){
+
+    public String getNoDescGalleryTitle() {
+        log.info("Getting gallery title with no description");
+        log.info("==========================================");
         return galleryTitleNoDesc.getText();
     }
-    public String getThreePicGalleryTitle(){
+
+    public String getThreePicGalleryTitle() {
+        log.info("Getting gallery title with 3 pictures with no description");
+        log.info("==========================================");
         return galleryTitleThreePic.getText();
     }
-    public String getNoDescThreePicGalleryTitle(){
+
+    public String getNoDescThreePicGalleryTitle() {
+        log.info("Getting gallery title with 3 pictures with no description");
+        log.info("==========================================");
         return galleryTitleThreePicNoDesc.getText();
     }
 }

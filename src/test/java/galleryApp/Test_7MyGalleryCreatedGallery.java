@@ -15,7 +15,7 @@ public class Test_7MyGalleryCreatedGallery extends TestBase {
 
     @Story("Checking if galleries previously created are present in My Galleries Page")
     @Test
-    public void testMyGalleries(){
+    public void testMyGalleries() {
         BasePage basePage = new BasePage(driver);
         MainPage mainPage = basePage.visitUrl();
         LoginPage loginPage = mainPage.visitLoginPage();
